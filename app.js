@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
-const body = require('body-parser');
+const bodyParser = require('body-parser');
 
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true })
   .then((x) => console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`))
