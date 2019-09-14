@@ -1,10 +1,11 @@
 require('dotenv').config();
 const express = require('express');
-const path = require('path');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+// const cors = require('cors');
 
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true })
+// DB connection
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then((x) => console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`))
   .catch((err) => {
     throw new Error(err);
@@ -12,10 +13,17 @@ mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true })
 
 const app = express();
 
-app.use(bodyParser.urlencoded({ extended: true }));
+// CORS
+// app.use(cors({
+//   credentials: true,
+//   origin: ['http://localhost:3000'], // <== this will be the URL of React app (it will be running on port 3000)
+// }));
 
-app.get('/', (req, res) => {
-  res.json('Hello world');
-});
+app.use(bodyParser.json());
+
+// routs
+const deliveryRouts = require('./routes/delivery-routs');
+
+app.use('/api', deliveryRouts);
 
 app.listen(process.env.PORT, () => console.log(`Server listening on PORT ${process.env.PORT}`));
